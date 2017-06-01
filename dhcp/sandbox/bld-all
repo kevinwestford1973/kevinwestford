@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# create src dir for cable plugins and dhcp relay agent
+git clone git@gitlab.cisco.com:vpp/ccmts-vpp.git
+git clone ssh://git@bitbucket-eng-sjc1.cisco.com:7999/cloudcmts/cmts-l3-services.git
+
+# compress the two src dirs to gz files
+tar -zcvf ccmts-vpp.tar.gz ccmts-vpp
+tar -zcvf cmts-l3-services.tar.gz cmts-l3-services
+
+# build docker images layer by layer
+
+docker build -t foo.base -f Dockerfile.base .
+docker build -t foo.build -f Dockerfile.build .
+docker build -t foo.install -f Dockerfile.install .
+docker build -t foo.plugin -f Dockerfile.plugin .
+docker build -t foo.relay -f Dockerfile.relay .
+
+

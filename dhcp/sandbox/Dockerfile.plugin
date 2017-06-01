@@ -1,0 +1,14 @@
+FROM foo.install
+
+COPY ccmts-vpp.tar.gz .
+RUN tar -zxvf ccmts-vpp.tar.gz && \
+    cd ccmts-vpp/src/plugins/ && \
+    autoreconf -fis && \
+    ./configure && \
+    make && \
+    make install
+
+COPY dhcp.init /.
+
+
+

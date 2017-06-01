@@ -1,0 +1,57 @@
+FROM golang:1.8.0-alpine
+
+MAINTAINER Mahe Korukonda (makoruko@cisco.com)
+
+# Set up the proxy for internet connection
+ENV http_proxy="proxy.esl.cisco.com:8080"
+ENV https_proxy="proxy.esl.cisco.com:8080"
+
+# Download development or build tools
+RUN apk upgrade --update 
+RUN apk add --update openssh git
+RUN apk add --update  autoconf automake libtool curl make g++ unzip
+
+# Config the git
+RUN git config --global user.name "mahe.korukonda"
+RUN git config --global user.email "makoruko@cisco.com"
+
+# Download required go packages
+RUN go get golang.org/x/net/ipv4
+RUN go get github.com/krolaw/dhcp4
+RUN go get github.com/google/gopacket
+RUN go get github.com/google/gopacket/layers
+RUN go get gopkg.in/Shopify/sarama.v1
+
+# Set up the go directory structure
+RUN mkdir -p /root/src /root/bin /root/pkg 
+
+# Update go PATH
+ENV GOPATH="/go:/root"
+
+
+
+
+# -------------- PROJECT SPECIFIC INSTRUCTIONS --------------
+
+# Create the project directory in the container
+RUN mkdir -p /root/src/cmts-l3-dhcprelay
+
+# Add the current project to the container
+COPY . /root/src/cmts-l3-dhcprelay
+
+# Set up the env variables
+WORKDIR /root/src/cmts-l3-dhcprelay
+ENV PROJ /root/src/cmts-l3-dhcprelay
+
+# Create the output directory for generated binaries
+RUN mkdir -p $PROJ/bin/
+
+# Upload the compilation script and compile the project
+COPY compile_with_gobuilder.sh $PROJ
+RUN chmod +x ./compile_with_gobuilder.sh
+RUN /bin/sh ./compile_with_gobuilder.sh
+
+# Move the binaries to the mounted directry during runtime
+COPY get_binaries.sh $PROJ
+CMD ["/bin/sh", "./get_binaries.sh"]
+

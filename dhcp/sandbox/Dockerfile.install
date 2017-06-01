@@ -1,0 +1,6 @@
+FROM foo.build
+
+RUN cd /vpp/ && dpkg -i build-root/*.deb; exit 0
+
+RUN rm /usr/lib/vpp_api_test_plugins/dpdk_test_plugin.so && \
+    rm /usr/lib/vpp_plugins/dpdk_plugin.so

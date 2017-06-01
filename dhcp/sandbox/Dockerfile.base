@@ -1,0 +1,7 @@
+FROM ubuntu:16.04
+
+RUN apt-get update && apt-get install -y \
+    git cmake build-essential sudo \
+    iproute2 iputils-ping inetutils-traceroute openssl python \
+    net-tools tcpdump
+    

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# tar cmts-l3-services dir
+tar -zcvf cmts-l3-services.tar.gz cmts-l3-services
+
+# run docker build whihc will copy .gz to docker and build plugins
+docker build -t foo.relay -f Dockerfile.relay .
+

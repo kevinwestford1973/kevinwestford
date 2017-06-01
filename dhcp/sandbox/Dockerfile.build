@@ -1,0 +1,13 @@
+FROM foo.base
+
+RUN git config --global http.proxy http://proxy-wsa.esl.cisco.com:80 && \
+    git config --global https.proxy https://proxy-wsa.esl.cisco.com:80 && \
+    git clone https://gerrit.fd.io/r/vpp
+
+RUN cd vpp && \
+    yes | make install-dep && \
+    make bootstrap && \
+    make pkg-deb
+
+
+

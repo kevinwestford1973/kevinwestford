@@ -1,0 +1,9 @@
+FROM foo.base
+
+COPY cmts-l3-services.tar.gz .
+
+RUN tar -zxvf cmts-l3-services.tar.gz && \
+    cd cmts-l3-services/dhcp && \
+    ./configure --prefix=/usr/local && \
+    make && \
+    make install

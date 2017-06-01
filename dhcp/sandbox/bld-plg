@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# step1: modify /root/chjin/foo/ccmts-vpp/src/plugins/cbl_dhcp/cbl_dhcp_node.c
+
+# step2: tar ccmts-vpp dir
+tar -zcvf ccmts-vpp.tar.gz ccmts-vpp
+
+# step3: run docker build whihc will copy .gz to docker and build plugins
+docker build -t foo.plugin -f Dockerfile.plugin .
+
